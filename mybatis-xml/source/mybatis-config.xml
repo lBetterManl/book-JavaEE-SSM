@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+<!-- MyBatis的配置参数有严格的顺序 properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFactory?,reflectorFactory?,plugins?,environments?,databaseIdProvider?,mappers? -->
+
+<!-- 属性 -->
+<properties resource="./jdbc.properties"></properties>
+
+<!-- 全局参数设置 -->
+<settings>
+	<setting name="logImpl" value="LOG4J"/>
+	<!-- 缓存 true -->
+	<setting name="cacheEnabled" value="true"/>
+</settings>
+
+<!-- 类型别名  在Mapper.xml中直接使用别名，不用包含包名-->
+<typeAliases>
+	<typeAlias alias="Student" type="com.hbut.hanson.domain.Student"/>
+	<!-- 使用<package>标签，表示扫描该包名下的所有类（除了接口和匿名内部类），如果类名上有注解@Alias("Student")，则使用注解指定的名称作为别名，如果没有则使用类名首字母小写作为别名student -->
+	<package name="com.hbut.hanson.domain"/>
+</typeAliases>
+
+<!-- 类型处理器 -->
+<typeHandlers>
+	<!-- 使用package元素将扫描com.hbut.hanson.type包下的所有类型处理器 -->
+	<!-- <package name="com.hbut.hanson.type"/> -->
+	<typeHandler handler="com.hbut.hanson.type.LocalDateTypeHandler"/>
+	<typeHandler handler="com.hbut.hanson.type.LocalTimeTypeHandler"/>
+</typeHandlers>
+
+<!-- 拦截器 -->
+<!-- 
+自定义plugin需要实现Interceptor接口，且每个拦截器都必须实现下面三个方法：
+1、intercept(Invocation invocation)是实现拦截逻辑的地方，内部要通过invocation.proceed()显式地推进责任
+	链前进，也就是调用下一个拦截器拦截目标的方法。
+2、plugin(Object target)用当前拦截器生成对目标target的代理，实际上是通过Plugin.wrap(target, this)来完
+	成的，把目标target和拦截器this传给了包装函数。
+3、setProperties(Properties properties)用于设置额外参数，参数配置在拦截器的Properties节点里面。
+ -->
+ <!-- 
+<plugins>
+	<plugin interceptor="com.hbut.hanson.plugin.ExamplePlugin">
+		<property name="someProperty" value="100"/>
+	</plugin>
+</plugins>
+ -->
+ 
+<!-- 环境 设置default选择环境 -->
+<environments default="development">
+	<!-- 数据库环境 1-->
+	<environment id="development">
+		<transactionManager type="JDBC"/>
+		<dataSource type="POOLED">
+			<property name="driver" value="${jdbc.driver}"/>
+			<property name="url" value="${jdbc.url}"/>
+			<property name="username" value="${jdbc.username}"/>
+			<property name="password" value="${jdbc.password}"/>
+		</dataSource>
+	</environment>
+	
+	<!-- 数据库环境 2-->
+	<environment id="release">
+		<transactionManager type="JDBC"/>
+		<dataSource type="POOLED">
+			<property name="driver" value="${jdbc.driver}"/>
+			<property name="url" value="${jdbc.url}"/>
+			<property name="username" value="${jdbc.username}"/>
+			<property name="password" value="${jdbc.password}"/>
+		</dataSource>
+	</environment>
+</environments>
+
+<!-- 映射器 -->
+<mappers>
+	<!-- 1.相对位置导入 -->
+	<mapper resource="com/hbut/hanson/map/StudentMapper.xml"/>
+	<!-- 2.文件路径导入 -->
+	<!-- <mapper url="file://var/com/hbut/hanson/map/StudentMapper.xml"/> -->
+	<!-- 3.映射接口类导入 -->
+	<!-- <mapper class="com.hbut.hanson.mapper.StudentMapper"/> -->
+	<!-- 4.批量注册 接口映射类-->
+	<!-- <package name="com.hbut.hanson.mapper"/> -->
+</mappers>
+</configuration>

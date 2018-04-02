@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hbut.hanson.map.StudentMapper">
+
+<!-- 查询 -->
+<select id="selectStudentByStuId" parameterType="int" resultType="Student">
+	SELECT * FROM student WHERE stuid = #{stuid}
+</select>
+
+<!-- 更新 -->
+<update id="updateStudent" parameterType="Student">
+UPDATE student SET stuName = #{stuname} WHERE stuId=#{stuid}
+</update>
+
+</mapper>
