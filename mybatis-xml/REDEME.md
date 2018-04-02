@@ -13,7 +13,7 @@ log4j:[http://logging.apache.org/log4j](http://logging.apache.org/log4j)
 # 项目说明  
 
 Java项目，MyBatis基于XML配置  
-数据库名：book-javaee-ssm-mybatis-demo  
+数据库名：book-javaee-ssm-mybatis-xml  
 
 # 数据库SQL  
 ```
