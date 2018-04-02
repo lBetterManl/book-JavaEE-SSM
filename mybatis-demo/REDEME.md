@@ -38,3 +38,7 @@ INSERT INTO student VALUES(3, '王五');
 {stuId=2, stuName=李四}
 {stuId=3, stuName=王五}
 ```
+
+# 小结
+
+Mybatis的SqlSession使用以及简单的sql和log4j配置  
