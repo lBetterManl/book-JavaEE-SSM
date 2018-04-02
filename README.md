@@ -7,4 +7,12 @@ Java EE框架技术（SpringMVC+Spring+Mybatis）-陈永政-西安电子科技�
 
 ### MyBatis日志  
 
+## MyBatis配置  
+
+### 基于XML方式配置MyBatis（mybatis-xml）  
+
+### 基于API方式配置MyBatis（Mybatis-api）  
+
+
+
 
