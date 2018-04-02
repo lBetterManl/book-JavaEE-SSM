@@ -6,6 +6,7 @@ MySQL:5.6
 
 mybatis:[https://github.com/mybatis](https://github.com/mybatis)  
 mysql jar:[http://www.mysql.com/products/connector](http://www.mysql.com/products/connector)  
+log4j:[http://logging.apache.org/log4j](http://logging.apache.org/log4j)
 
 # 项目说明  
 
@@ -28,4 +29,12 @@ CREATE TABLE student (
 INSERT INTO student VALUES(1, '张三');
 INSERT INTO student VALUES(2, '李四');
 INSERT INTO student VALUES(3, '王五');
+```
+
+# 控制台运行结果  
+
+```
+{stuId=1, stuName=张三}
+{stuId=2, stuName=李四}
+{stuId=3, stuName=王五}
 ```

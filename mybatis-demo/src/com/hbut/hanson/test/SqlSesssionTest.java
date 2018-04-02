@@ -10,6 +10,10 @@
 package com.hbut.hanson.test;
 
 import java.io.InputStream;
+
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -34,8 +38,18 @@ public class SqlSesssionTest {
 			inputStream = Resources.getResourceAsStream(resource);
 			// 根据配置文件生成SqlSessionFactory对象
 			SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+			// sqlSession获取
+			sqlSession = sqlSessionFactory.openSession();
+			// 执行查询请求
+			List<Map> list = sqlSession.selectList("com.hbut.hanson.map.StudentMapper.selectStudent");
+			// 输出查询结果
+			for (Map map : list) {
+				System.out.println(map);
+			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
 		}
 
 	}
