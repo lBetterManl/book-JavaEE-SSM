@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hbut.hanson.mapper.DepartmentMapper">
+
+<!-- 开启二级缓存:
+	1、映射文件中select语句都会被缓存
+	2、insert、update、delete语句执行会清空缓存
+ -->
+<cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+
+<!-- 引用另一个空间的缓存 -->
+<!-- 
+	<cache-ref namespace="com.hbut.hanson.mapper.Employee"/>
+ -->
+
+
+<!-- 1、collection映射一对多 -->
+<resultMap id="employeeResultMap" type="employee">
+	<id property="empid" column="empid"/>
+	<result property="empname" column="empname"/>
+</resultMap>
+<resultMap id="departmentResultMap" type="department">
+	<id property="depid" column="depid"/>
+	<result property="depname" column="depname"/>
+	<collection property="employees" resultMap="employeeResultMap"/>
+</resultMap>
+<select id="selectDepartmentAndEmployeesById" parameterType="int" resultMap="departmentResultMap">
+	SELECT 
+	dep.depid, dep.depname, emp.empid, emp.name 
+	FROM
+	department dep LEFT OUTER JOIN employee emp ON dep.depid=emp.depid 
+	WHERE
+	dep.depid = #{depid}
+</select>
+
+
+<!-- 2、select嵌套映射一对多（不推荐） -->
+<resultMap id="departmentResultMap2" type="department">
+	<id property="depid" column="depid"/>
+	<result property="depname" column="depname"/>
+	<collection property="employees" select="" column="depid"></collection>
+</resultMap>
+<select id="selectEmployeeById" parameterType="int" resultMap="employeeResultMap">
+	SELECT * FROM employee WHERE empid=#{empid}
+</select>
+<select id="selectDepartmentAndEmployeesById2" parameterType="int" resultMap="departmentResultMap2">
+	SELECT dep.depid, dep.depname 
+	FROM department dep 
+	WHERE dep.depid=#{depid}
+</select>
+
+
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hbut.hanson.mapper.UserinfoMapper">
+
+<!-- 注意：SQL语句必须使用数据库字段 -->
+
+
+<!-- 能多次使用的sql段 -->
+<sql id="userColumns">user_id, user_name, password</sql>
+
+
+<!-- 映射对象和数据库字段 -->
+<resultMap id="userinfoResultMap" type="userinfo">
+	<id property="userid" column="user_id"/>
+	<result property="username" column="user_name"/>
+	<result property="password" column="password"/>
+</resultMap>
+
+<!-- 1、关联Userinfo Address -->
+<resultMap id="userinfoAndAddressResultMap" type="userinfo" extends="userinfoResultMap">
+	<id property="address.addrid" column="addrid"/>
+	<result property="address.city" column="city"/>
+	<result property="address.street" column="street"/>
+	<result property="address.zip" column="zip"/>
+</resultMap>
+
+<!-- 2、association关联Userinfo Address -->
+<resultMap id="addressResultMap" type="address">
+	<id property="addrid" column="addrid"/>
+	<result property="city" column="city"/>
+	<result property="street" column="street"/>
+	<result property="zip" column="zip"/>
+</resultMap>
+<resultMap id="userinfoAndAddressResultMap2" type="userinfo">
+	<id property="userid" column="user_id"/>
+	<result property="username" column="user_name"/>
+	<result property="password" column="password"/>
+	<association property="address" column="addrid" resultMap="addressResultMap"/>
+</resultMap>
+
+<!-- 3、association2关联Userinfo Address -->
+<resultMap id="userinfoAndAddressResultMap3" type="userinfo">
+	<id property="userid" column="user_id"/>
+	<result property="username" column="user_name"/>
+	<result property="password" column="password"/>
+	<!-- 处理组合键时可以使用 column="{pro1=col1, pro2=col2}"-->
+	<association property="address" column="addrid" javaType="address">
+		<id property="addrid" column="addrid"/>
+		<result property="city" column="city"/>
+		<result property="street" column="street"/>
+		<result property="zip" column="zip"/>
+	</association>
+</resultMap>
+
+<!-- 4、select嵌套查询 关系映射（不建议使用） -->
+<select id="selectAddressById" parameterType="int" resultMap="addressResultMap">
+	SELECT * FROM address WHERE addrid=#{addrid}
+</select>
+<resultMap id="userinfoAndAddressResultMap4" type="userinfo">
+	<id property="userid" column="user_id"/>
+	<result property="username" column="user_name"/>
+	<result property="password" column="password"/>
+	<association property="address" column="addrid" select="selectAddressById"/>
+</resultMap>
+
+
+<select id="selectUserinfo" resultType="userinfo">
+	SELECT <include refid="userColumns"/> FROM userinfo
+</select>
+
+<!-- 对象与数据库字段不匹配 解决方法1 -->
+<select id="selectUserinfoById" parameterType="int" resultType="userinfo">
+	SELECT 
+	user_id as "userid",
+	user_name as "username",
+	password
+	FROM userinfo
+	WHERE user_id = #{userid}
+</select>
+
+<!-- 使用userinfoResultMap -->
+<select id="selectUserinfoById2" parameterType="int" resultMap="userinfoResultMap">
+	SELECT user_id,user_name,password FROM userinfo WHERE user_id=#{userid}
+</select>
+
+<!-- (1)使用 userinfoAndAddressResultMap-->
+<select id="selectUserinfoAndAddress" parameterType="int" resultMap="userinfoAndAddressResultMap">
+	SELECT 
+	user_id,user_name,password,a.addrid,city,street,zip 
+	FROM
+	userinfo u LEFT OUTER JOIN address a ON u.addrid=a.addrid WHERE u.user_id=#{userid}
+</select>
+
+<!-- (2)使用 userinfoAndAddressResultMap2-->
+<select id="selectUserinfoAndAddress2" parameterType="int" resultMap="userinfoAndAddressResultMap2">
+	SELECT 
+	user_id,user_name,password,a.addrid,city,street,zip 
+	FROM
+	userinfo u LEFT OUTER JOIN address a ON u.addrid=a.addrid WHERE u.user_id=#{userid}
+</select>
+
+<!-- (3)使用 userinfoAndAddressResultMap3-->
+<select id="selectUserinfoAndAddress3" parameterType="int" resultMap="userinfoAndAddressResultMap2">
+	SELECT 
+	user_id,user_name,password,a.addrid,city,street,zip 
+	FROM
+	userinfo u LEFT OUTER JOIN address a ON u.addrid=a.addrid WHERE u.user_id=#{userid}
+</select>
+
+<!-- (4)使用 userinfoAndAddressResultMap4（不建议使用）-->
+<select id="selectUserinfoAndAddress4" parameterType="int" resultMap="userinfoAndAddressResultMap4">
+	SELECT * FROM userinfo u WHERE u.user_id=#{userid}
+</select>
+
+</mapper>

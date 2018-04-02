@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+<!-- MyBatis的配置参数有严格的顺序 properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFactory?,reflectorFactory?,plugins?,environments?,databaseIdProvider?,mappers? -->
+
+<!-- 属性 -->
+<properties resource="./jdbc.properties"></properties>
+
+<!-- 全局参数设置 -->
+<settings>
+	<setting name="logImpl" value="LOG4J"/>
+	<!-- 缓存 true -->
+	<setting name="cacheEnabled" value="true"/>
+</settings>
+
+<!-- 类型别名  在Mapper.xml中直接使用别名，不用包含包名-->
+<typeAliases>
+	<!-- 使用<package>标签，表示扫描该包名下的所有类（除了接口和匿名内部类），如果类名上有注解@Alias("Student")，则使用注解指定的名称作为别名，如果没有则使用类名作为别名(不区分大小写)student -->
+	<package name="com.hbut.hanson.domain"/>
+</typeAliases>
+
+ 
+<!-- 环境 设置default选择环境 -->
+<environments default="development">
+	<!-- 数据库环境 1-->
+	<environment id="development">
+		<transactionManager type="JDBC"/>
+		<dataSource type="POOLED">
+			<property name="driver" value="${jdbc.driver}"/>
+			<property name="url" value="${jdbc.url}"/>
+			<property name="username" value="${jdbc.username}"/>
+			<property name="password" value="${jdbc.password}"/>
+		</dataSource>
+	</environment>
+	
+	<!-- 数据库环境 2-->
+	<environment id="release">
+		<transactionManager type="JDBC"/>
+		<dataSource type="POOLED">
+			<property name="driver" value="${jdbc.driver}"/>
+			<property name="url" value="${jdbc.url}"/>
+			<property name="username" value="${jdbc.username}"/>
+			<property name="password" value="${jdbc.password}"/>
+		</dataSource>
+	</environment>
+</environments>
+
+<!-- 映射器 -->
+<mappers>
+	<!-- 4.批量注册 接口映射类-->
+	<package name="com.hbut.hanson.mapper"/>
+</mappers>
+</configuration>

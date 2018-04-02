@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hbut.hanson.mapper.StudentMapper">
+
+<!-- 返回List<Student> -->
+<select id="selectStudent" resultType="student">
+	SELECT * FROM student
+</select>
+
+<!-- 查询 -->
+<select id="selectStudentByStuId" parameterType="int" resultType="student">
+	SELECT * FROM student WHERE stuid=#{stuid}
+</select>
+
+<!-- 更新 -->
+<update id="updateStudent" parameterType="student">
+	UPDATE student SET stuname=#{stuname} WHERE stuid=#{stuid}
+</update>
+
+<!-- 添加 -->
+<!-- Oracle并不支持自增 假设有一列STU_ID_SEQ来生成stuid
+	<insert id="insertStudent" parameterType="student">
+		<selectKey KeyProperty="stuid" resultType="int" order="BEFORE">
+			SELECT ELEARNING.STU_ID_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO student(stuid, stuname) VALUES(#{stuid}, #{stuname})
+	</insert>
+ -->
+<insert id="insertStudent" parameterType="student" useGeneratedKeys="true" keyProperty="stuid">
+	INSERT INTO student(stuname) VALUES(#{stuname})
+</insert>
+
+<!-- 删除 -->
+<delete id="deleteStudent" parameterType="int" flushCache="true" statementType="PREPARED" timeout="2000">
+	DELETE FROM student WHERE stuid=#{stuid}
+</delete>
+
+</mapper>
