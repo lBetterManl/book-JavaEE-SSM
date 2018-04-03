@@ -88,20 +88,14 @@ public class SpringTest{
 **2、引入角色接口的关系**  （[spring-01-moattack/com.hbut.hanson.moattack02](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-moattack/src/com/hbut/hanson/moattack02)）  
 **3、剧本和演员解耦**  （[spring-01-moattack/com.hbut.hanson.moattack03](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-moattack/src/com/hbut/hanson/moattack03)）  
 
+### 4.2.2 依赖注入的类型
+**1、构造方法注入**  
+**2、属性注入**  
+**3、接口注入**  
 
 ### 4.3 Bean的装配  
 
 ### 4.4 面向切面编程（AOP）  
 
 ### 4.5 Spring的事务管理  
-
-
-
-
-
-
-
-
-
-
 
