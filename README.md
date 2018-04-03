@@ -73,7 +73,7 @@ public class SpringTest{
 ```
 
 ### 4.2 控制反转（IoC）或 依赖注入(ID)  
-（[spring-01-attack](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-attack)）  
+（[spring-01-moattack](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-moattack)）  
 
 **（1）谁依赖谁：**应用程序依赖于IoC容器  
 **（2）为何要依赖：**应用程序需要IoC容器来提供对象需要的外部资源  
@@ -84,9 +84,9 @@ public class SpringTest{
 **案例场景：**  
 > 电影《墨攻》的一个场景：当刘德华所饰演的墨者革离角色到达城门下，城上守军问：“来者何人？”刘德华回答：“墨者革离！”。用Java类实现“城门问答”的场景。  
 
-**1、剧本和演员直接耦合**  （[spring-01-attack/com.hbut.hanson.moattack01](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-attack/src/com/hbut/hanson/moattack01)）  
-**2、引入角色接口的关系**  （[spring-01-attack/com.hbut.hanson.moattack02](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-attack/src/com/hbut/hanson/moattack02)）  
-**3、剧本和演员解耦**  （[spring-01-attack/com.hbut.hanson.moattack03](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-attack/src/com/hbut/hanson/moattack03)）  
+**1、剧本和演员直接耦合**  （[spring-01-moattack/com.hbut.hanson.moattack01](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-moattack/src/com/hbut/hanson/moattack01)）  
+**2、引入角色接口的关系**  （[spring-01-moattack/com.hbut.hanson.moattack02](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-moattack/src/com/hbut/hanson/moattack02)）  
+**3、剧本和演员解耦**  （[spring-01-moattack/com.hbut.hanson.moattack03](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-moattack/src/com/hbut/hanson/moattack03)）  
 
 
 ### 4.3 Bean的装配  
