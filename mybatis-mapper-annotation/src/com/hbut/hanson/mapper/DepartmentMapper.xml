@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hbut.hanson.mapper.DepartmentMapper">
+
+<!-- 被注解使用 -->
+
+<resultMap id="employeeResultMap" type="employee">
+	<id property="empid" column="empid"/>
+	<result property="empname" column="empname"/>
+</resultMap>
+
+<resultMap id="departmentResultMap" type="department">
+	<id property="depid" column="depid"/>
+	<result property="depname" column="depname"/>
+	<collection property="employees" resultMap="employeeResultMap"/>
+</resultMap>
+
+
+</mapper>
