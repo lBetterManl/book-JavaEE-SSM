@@ -85,10 +85,10 @@ public class SpringTest{
 
 （[spring-01-moattack](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-01-moattack)）  
 
-**（1）谁依赖谁：**应用程序依赖于IoC容器  
-**（2）为何要依赖：**应用程序需要IoC容器来提供对象需要的外部资源  
-**（3）谁注入谁：**IoC容器注入应用程序某个对象，该对象是应用程序依赖的对象  
-**（4）注入了什么：**注入某个对象所需的外部资源（对象、资源、常量数据）  
+**(1)谁依赖谁：**应用程序依赖于IoC容器  
+**(2)为何要依赖：**应用程序需要IoC容器来提供对象需要的外部资源  
+**(3)谁注入谁：**IoC容器注入应用程序某个对象，该对象是应用程序依赖的对象  
+**(4)注入了什么：**注入某个对象所需的外部资源（对象、资源、常量数据）  
 
 #### 4.2.1 IoC详细分析  
 
@@ -173,7 +173,7 @@ public class AutoBeanTest(){
 
 （[spring-02-core](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-02-core)） 
 
-**Aop的相关术语： **   
+**Aop的相关术语：**  
 
 1.切面（Aspect）：一个关注点的模快化，这个关注点可能会横切多个对象。事务管理就是关于横切关注点的例子。  
 2.连接点（Joinpoint）：在程序过程中某个特定的点，比如某个方法调用的时候或者处理异常的时候。一个连接点总是表示一个方法的执行。  
