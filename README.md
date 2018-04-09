@@ -377,6 +377,8 @@ public interface PlatformTransactionManager {
 
 ## 5、SpringMVC
 
+（[spring-03-mvc](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-03-mvc)）  
+
 ### 5.1 创建SpringMVC程序
 
 1.导入jar包
@@ -449,6 +451,78 @@ public interface PlatformTransactionManager {
 ### 5.4 SpringMVC文件上传下载
 
 ### 5.5 SpringMVC常用注解
+
+#### 1.@Controller
+
+> 作用在类上
+
+#### 2.@RequestMapping
+
+> 既可以作用在类上，又可以作用在方法上
+
+#### 3.@PathVariable
+
+> 将方法参数与URL绑定，可以同时有多个。
+
+#### 4.@RequestParam
+
+> 将请求参数绑定在方法参数上，还可以要求必须输入的参数@RequestParam(valur="id", required=true)
+
+#### 5.@RequestBody
+
+> 方法参数应该被绑定到HTTP请求body上。
+
+```java
+@RequestMapping(value="/something", method=RequestMethod.PUT)
+public void handle(@RequestBody String body, Writer writer) throws Exception{
+    writer.write(body);
+}
+```
+
+#### 6.ResponseBody
+
+> 将返回类型直接输入到HTTP response body中，输出json格式。
+
+```java
+@RequestMapping(value="/something", method=RequestMethod.PUT)
+@ResponseBody
+public String hello(){
+    return "Hello, World!";
+}
+```
+
+#### 7.RestController
+
+> 作用在类上，实现REST的API，只服务于JSON、XML或其他自动一类型。避免重复书写@RequestMapping和@ResponseBody。
+
+```java
+@RestController
+public class ResufulController(){
+    @RequestMapping(value="/getUserName", Method=RequestMethod.POST)
+    public String getUserName(@RequestParam(value="name")String name){
+        return name;
+    }
+}
+```
+
+#### 8.HttpEntity
+
+> 除了能获得request和response响应之外，还能访问请求和响应头。
+
+```java
+@RequestMApping("/something")
+public ResponseEntity<String> hansle(HttpEntity<byte[]> requestEntity) throws UnsupportedEncodingException{
+    String requestHeader = requestEntity.getHeaders().getFirst("MyRequestHeader");
+    byte[] requestBody = requestEntity.getBody();
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.set("MyRequestHeader", "MyValuse");
+    return new ResponseEntity<String>("Hello World", responseHeaders, HttpStatus.CREATED);
+}
+```
+
+#### 9.ModelAttribute
+
+> 作用在方法或方法参数上。作用在参数上时，映射前台数据和方法参数。作用在方法上时，会在调用@RequestMapping方法之前被调用。该方法支持与@RequestMapping一样的参数类型，但是并不能直接映射成请求。
 
 ## 6、SpringMVC Spring MyBatis集成
 
