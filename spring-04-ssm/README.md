@@ -1,6 +1,8 @@
 # Spring+SpringMVC+Mybatis整合
 
-Spring4+MyBatis3
+> 基础框架搭建，并非完整项目
+
+Spring4+MyBatis3+SpringMVC
 
 ## 环境jar包及xml配置
 

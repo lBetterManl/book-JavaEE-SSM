@@ -526,3 +526,13 @@ public ResponseEntity<String> hansle(HttpEntity<byte[]> requestEntity) throws Un
 
 ## 6、SpringMVC Spring MyBatis集成
 
+（[spring-04-ssm](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-04-ssm)）
+
+> Spring4+MyBatis3+SpringMVC框架搭建
+
+## 7、项目实战（资费管理项目）
+
+**项目需求：**
+
+> 角色管理、管理员管理、资费管理、财务账号管理、业务账号管理、账单管理、报表、个人信息、修改密码。
+
