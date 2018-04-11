@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 自动扫描包 -->
+	<context:component-scan base-package="com.hbut.hanson"></context:component-scan>
+	
+	<!-- 引入jdbc配置 -->
+	<!-- <context:property-placeholder location="classpath:jdbc.properties" /> -->
+	
+	<!-- 引入jdbc配置 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties"></property>
+	</bean>
+	
+	<!-- dbcp数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<!-- 初始化连接池大小 -->
+		<property name="initialSize" value="${jdbc.initialSize}"></property>
+		<!-- 连接池最大数量 -->
+		<property name="maxTotal" value="${jdbc.maxTotal}"></property>
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="${jdbc.maxIdle}"></property>
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${jdbc.minIdle}"></property>
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWaitMillis" value="${jdbc.maxWaitMillis}"></property>
+		<!-- 事务是否自动提交 -->
+		<property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}"></property>
+	</bean>
+	
+	<!-- Spring+MyBatis -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	</bean>
+	<!-- MyBatis使用Mapper接口方式调用，自动扫描加载Sql映射文件/接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.hbut.hanson.mapper"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	<!-- (一般不使用)采用实体dao调用，在dao使用注解@Resource(name="sqlSessionTemplate")方式或继承SqlSessionDaoSupport -->
+    <!-- 
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.mapper.sqlSessionTemplate">
+   		<constructor-arg ref="sqlSessionFactory"></constructor-arg>
+    </bean>
+     -->
+     
+     <!-- 事务管理 -->
+     <bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	 </bean>
+	 <!-- AOP事务管理方法匹配规则 -->
+	 <tx:advice id="txAdvice" transaction-manager="transactionManager">
+	 	<tx:attributes>
+	 		<tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+	 		<tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+	 		<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+	 		<tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+	 		<tx:method name="*" propagation="SUPPORTS" read-only="false" rollback-for="java.lang.Exception"/>
+	 	</tx:attributes>
+	 </tx:advice>
+	 <!-- AOP处理事务 -->
+	 <aop:config>
+	 	<aop:pointcut id="allServiceMethods" expression="execution(* com.hbut.hanson.service..*(..))"/>
+	 	<aop:advisor pointcut-ref="allServiceMethods" advice-ref="txAdvice" />
+	 </aop:config>
+	 <!-- 使用声明式事务 -->
+	 <tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>
