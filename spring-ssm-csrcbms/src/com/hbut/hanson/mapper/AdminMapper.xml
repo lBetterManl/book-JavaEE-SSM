@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hbut.hanson.mapper.AdminMapper">
+
+	<select id="findByPage" parameterType="com.hbut.hanson.entity.page.Page"
+		resultMap="adminMap">
+
+		select * from admininfo
+		where adminId in (
+		select a.adminId
+		from
+		admininfo a
+		left join adminrole ar on a.adminId=ar.adminId
+		left join
+		roleinfo ri on ri.roleId=ar.roleId
+		left join rolemodule rm on
+		rm.roleId=ri.roleId
+		<where>
+			<if test="roleName!=null &amp;&amp; roleName.length()&gt;0">
+				and ri.name like '%'||#{roleName}||'%'
+			</if>
+			<if test="moduleId!=null">
+				and rm.moduleId=#{moduleId}
+			</if>
+		</where>
+		) order by adminId limit #{begin},#{end}
+
+	</select>
+	<select id="selectRoles" parameterType="int"
+		resultType="com.hbut.hanson.entity.Role">
+		select * from roleinfo where roleId in (
+		select roleId from
+		adminrole
+		where adminId=#{id}
+		)
+	</select>
+	<resultMap id="adminMap" type="com.hbut.hanson.entity.Admin">
+		<id column="adminId" property="adminId" />
+		<collection ofType="com.hbut.hanson.entity.Role" property="roles"
+			javaType="java.util.ArrayList" column="adminId" select="selectRoles" />
+
+	</resultMap>
+
+	<select id="findRows" parameterType="com.hbut.hanson.entity.page.Page"
+		resultType="int">
+		select count(*) from admininfo
+		where adminId in (
+		select a.adminId
+		from
+		admininfo a
+		left join adminrole ar on a.adminId=ar.adminId
+		left join
+		roleinfo ri on ri.roleId=ar.roleId
+		left join rolemodule rm on
+		rm.roleId=ri.roleId
+		<where>
+			<if test="roleName!=null &amp;&amp; roleName.length()&gt;0">
+				and ri.name like '%'||#{roleName}||'%'
+			</if>
+			<if test="moduleId!=null">
+				and rm.moduleId=#{moduleId}
+			</if>
+		</where>
+		)
+	</select>
+
+	<update id="updatePassword" parameterType="hashMap">
+		update admininfo set password=#{password}
+		where
+		adminId in
+		<foreach collection="ids" open="(" close=")" separator=","
+			item="id">
+			#{id}
+		</foreach>
+	</update>
+
+	<select id="findById" parameterType="int" resultMap="adminMap">
+		select *
+		from admininfo where adminId=#{id}
+	</select>
+
+	<insert id="saveAdmin" useGeneratedKeys="true" keyProperty="adminId"
+		parameterType="com.hbut.hanson.entity.Admin">
+		insert into
+		admininfo(adminCode,password,name,telephone,email,enrollDate) values(
+		#{adminCode,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{telephone,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{enrollDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<insert id="saveAdminRoles" parameterType="hashMap">
+		insert into
+		adminrole(adminId,roleId) values(
+		#{adminId,jdbcType=NUMERIC},
+		#{roleId,jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<update id="updateAdmin" parameterType="com.hbut.hanson.entity.Admin">
+		update admininfo set
+		name=#{name,jdbcType=VARCHAR},
+		telephone=#{telephone,jdbcType=VARCHAR},
+		adminCode=#{adminCode,jdbcType=VARCHAR},
+		email=#{email,jdbcType=VARCHAR}
+		where adminId=#{adminId}
+	</update>
+
+	<delete id="deleteAdminRoles" parameterType="int">
+		delete from
+		adminrole where adminId=#{adminId}
+	</delete>
+
+	<delete id="deleteAdmin" parameterType="int">
+		delete from admininfo
+		where adminId=#{id}
+	</delete>
+
+	<select id="findByCode" parameterType="string"
+		resultType="com.hbut.hanson.entity.Admin">
+		select * from admininfo where adminCode=#{adminCode}
+	</select>
+
+	<update id="updateByPassword" parameterType="com.hbut.hanson.entity.Admin">
+		update admininfo set
+		password=#{password,jdbcType=VARCHAR}
+		where adminId=#{adminId}
+	</update>
+
+	<select id="findModulesByAdmin" parameterType="int"
+		resultType="com.hbut.hanson.entity.Module">
+		select * from moduleinfo where moduleId in (
+		select
+		rm.moduleId
+		from adminrole ar
+		inner join roleinfo ri on
+		ri.roleId=ar.roleId
+		inner join rolemodule rm on rm.roleId=ri.roleId
+		where ar.adminId=#{adminId}
+		) order by moduleId
+	</select>
+
+	<select id="findByList" parameterType="com.hbut.hanson.vo.AdminVo"
+		resultType="com.hbut.hanson.vo.AdminVo">
+		select * from admininfo
+		<where>
+			<if test="adminCode!=null">
+				and adminCode=#{adminCode}
+			</if>
+			<if test="password!=null">
+				and password=#{password}
+			</if>
+		</where>
+	</select>
+</mapper>

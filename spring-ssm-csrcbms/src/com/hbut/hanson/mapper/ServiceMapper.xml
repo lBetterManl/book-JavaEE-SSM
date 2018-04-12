@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hbut.hanson.mapper.ServiceMapper">
+	<select id="findByPage" parameterType="com.hbut.hanson.entity.page.Page"
+		resultType="com.hbut.hanson.vo.ServiceVo">
+		select s.*,a.realName,a.idcardNo,c.name costName,c.descr from service
+		s
+		inner join account a on a.accountId=s.accountId
+		inner join cost c on
+		c.costId=s.costId
+		<where>
+			<if test="serverUserName!=null &amp;&amp; serverUserName.length()&gt;0">
+				and s.serverUserName=#{serverUserName}
+			</if>
+			<if test="hostIp!=null &amp;&amp; hostIp.length()&gt;0">
+				and s.hostIp=#{hostIp}
+			</if>
+			<if test="idcardNo!=null &amp;&amp; idcardNo.length()&gt;0">
+				and a.idcardno=#{idcardNo}
+			</if>
+			<if test='status!=null &amp;&amp; !status.equals("-1")'>
+				and s.status=#{status}
+			</if>
+		</where>
+		order by s.serviceId limit #{begin},#{end}
+	</select>
+
+	<select id="findRows" parameterType="com.hbut.hanson.entity.page.Page"
+		resultType="int">
+		select
+		count(*)
+		from service s
+		inner join account a on
+		a.accountId=s.accountId
+		inner
+		join cost c on c.costId=s.costId
+		<where>
+			<if test="serverUserName!=null &amp;&amp; serverUserName.length()&gt;0">
+				and s.serverUserName=#{serverUserName}
+			</if>
+			<if test="hostIp!=null &amp;&amp; hostIp.length()&gt;0">
+				and s.hostIp=#{hostIp}
+			</if>
+			<if test="idcardNo!=null &amp;&amp; idcardNo.length()&gt;0">
+				and a.idcardNo=#{idcardNo}
+			</if>
+			<if test='status!=null &amp;&amp; !status.equals("-1")'>
+				and s.status=#{status}
+			</if>
+		</where>
+	</select>
+
+	<update id="updateStatus" parameterType="com.hbut.hanson.entity.Service">
+		update service set status=#{status},
+		<choose>
+			<when test="status=='0'">
+				pauseDate=null
+			</when>
+			<when test="status=='1'">
+				pauseDate=NOW()
+			</when>
+			<otherwise>
+				closeDate=NOW()
+			</otherwise>
+		</choose>
+		where serviceId=#{serviceId}
+	</update>
+
+	<update id="pauseByAccount" parameterType="int">
+		update service set
+		status='1',pauseDate=NOW()
+		where accountId=#{accountId}
+	</update>
+
+	<update id="deleteByAccount" parameterType="int">
+		update service set
+		status='2',closeDate=NOW()
+		where accountId=#{accountId}
+	</update>
+	<update id="update" parameterType="com.hbut.hanson.entity.Service">
+		update service set
+		costId=#{costId}
+		where serviceId=#{serviceId}
+	</update>
+
+	<select id="findById" parameterType="int"
+		resultType="com.hbut.hanson.entity.Service">
+		select * from service where serviceId=#{id}
+	</select>
+
+	<insert id="save" parameterType="com.hbut.hanson.entity.Service"
+		useGeneratedKeys="true" keyProperty="serviceId">
+		INSERT INTO service (
+		accountId,
+		hostIp,
+		serverUserName,
+		password,
+		status,
+		createDate,
+		costId
+		)
+		VALUES
+		(
+		#{accountId},
+		#{hostIp,jdbcType=VARCHAR},
+		#{serverUserName,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{createDate,jdbcType=TIMESTAMP},
+		#{costId,jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<insert id="insertUpdateBak" parameterType="com.hbut.hanson.entity.Service">
+		insert into
+		serviceupdatebak(serviceId,costId) values(
+		#{serviceId,jdbcType=NUMERIC},
+		#{costId,jdbcType=NUMERIC}
+		)
+	</insert>
+</mapper>

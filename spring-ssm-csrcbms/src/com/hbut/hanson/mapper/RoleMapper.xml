@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hbut.hanson.mapper.RoleMapper">
+	<select id="findByPage" parameterType="com.hbut.hanson.entity.page.Page"
+		resultMap="roleMap">
+	<![CDATA[
+		select * from roleinfo order by roleid limit #{begin},#{end}
+	]]>
+	</select>
+
+	<select id="selectModules" parameterType="int"
+		resultType="com.hbut.hanson.entity.Module">
+		select * from moduleinfo where moduleid in (
+		select moduleid from rolemodule
+		where roleid=#{roleId}
+		)
+	</select>
+
+	<resultMap id="roleMap" type="com.hbut.hanson.entity.Role">
+		<id column="roleid" property="roleId" />
+		<collection ofType="com.hbut.hanson.entity.Module"
+			property="modules" javaType="java.util.ArrayList" column="roleid"
+			select="selectModules" />
+
+	</resultMap>
+
+	<select id="findRows" parameterType="com.hbut.hanson.entity.page.Page"
+		resultType="int">
+		select count(*) from roleinfo
+	</select>
+
+	<select id="findAllModules" resultType="com.hbut.hanson.entity.Module">
+		select * from moduleinfo
+	</select>
+
+	<select id="findById" parameterType="int" resultMap="roleMap">
+		select *
+		from roleinfo where roleid=#{id}
+	</select>
+
+	<insert id="saveRole" parameterType="com.hbut.hanson.entity.Role"
+		useGeneratedKeys="true" keyProperty="roleId">
+		insert into roleinfo(name) values(
+		#{name,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="saveRoleModules" parameterType="hashMap">
+		insert into
+		rolemodule(roleId,moduleId) values(
+		#{roleId,jdbcType=NUMERIC},
+		#{moduleId,jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<update id="updateRole" parameterType="com.hbut.hanson.entity.Role">
+	update roleinfo set
+	name=#{name} where roleid=#{roleId}
+	</update>
+
+	<delete id="deleteRoleModules" parameterType="int">
+		delete from
+		rolemodule where roleid=#{roleId}
+	</delete>
+
+	<delete id="deleteRole" parameterType="int">
+		delete from roleinfo where
+		roleid=#{roleId}
+	</delete>
+
+	<select id="findByName" parameterType="string" resultMap="roleMap">
+		select
+		* from roleinfo where name=#{name}
+	</select>
+</mapper>

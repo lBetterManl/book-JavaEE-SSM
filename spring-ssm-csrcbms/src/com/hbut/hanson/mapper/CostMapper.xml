@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hbut.hanson.mapper.CostMapper">
+
+	<select id="findAll" resultType="com.hbut.hanson.entity.Cost">
+		select * from cost order by
+		costId
+	</select>
+
+
+	<insert id="save" useGeneratedKeys="true" keyProperty="costId"
+		parameterType="com.hbut.hanson.entity.Cost">
+		insert into cost(
+		costId,
+		name,
+		baseDuration,
+		baseCost,
+		unitCost,
+		descr,
+		creatTime,
+		startTime,
+		costType,
+		status)
+		values(
+
+		#{costId,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{baseDuration,jdbcType=VARCHAR},
+		#{baseCost,jdbcType=VARCHAR},
+		#{unitCost,jdbcType=VARCHAR},
+		#{descr,jdbcType=VARCHAR},
+		#{creatTime,jdbcType=VARCHAR},
+		#{startTime,jdbcType=VARCHAR},
+		#{costType,jdbcType=VARCHAR},
+		#{status,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+
+
+
+	<select id="findById" parameterType="int"
+		resultType="com.hbut.hanson.entity.Cost">
+		select * from cost where costId=#{costId}
+	</select>
+
+	<update id="update" parameterType="com.hbut.hanson.entity.Cost">
+		<![CDATA[
+			update cost set 
+			name=#{name}, 
+			baseduration=#{baseDuration,jdbcType=NUMERIC},
+			basecost=#{baseCost,jdbcType=NUMERIC},
+			unitcost=#{unitCost,jdbcType=NUMERIC},
+			descr=#{descr,jdbcType=VARCHAR},
+			costtype=#{costType,jdbcType=CHAR}
+			where costId=#{costId}
+		]]>
+	</update>
+
+	<delete id="delete" parameterType="int">
+		delete from cost where
+		costId=#{costId}
+	</delete>
+
+	<update id="startFee" parameterType="com.hbut.hanson.entity.Cost">
+		update cost set status=#{status},startTime=NOW()
+		where costId=#{costId}
+	</update>
+	<select id="findByPage" parameterType="com.hbut.hanson.entity.page.Page"
+	resultType="com.hbut.hanson.entity.Cost">
+	select * from cost
+		<if test="baseDurationSort!='' or baseCostSort!=''">
+			order by baseDuration ${baseDurationSort},baseCost
+			${baseCostSort}
+		</if>
+		limit #{begin},#{end}
+	</select>
+
+	<select id="findRows" resultType="int">
+		select count(*) from cost
+	</select>
+
+</mapper>

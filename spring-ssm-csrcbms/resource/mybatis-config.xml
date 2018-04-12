@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 别名的定义 -->
+	<typeAliases>
+	 	<!-- 批量定义别名 ，指定包名，自动扫描包中的类，别名即为类名，首字母大小写无所谓-->
+		<package name="com.yhc.entity"/>
+	</typeAliases>
+
+	<mappers>
+		<package name="com.hbut.hanson.mapper"/>
+	</mappers>
+</configuration>
