@@ -532,6 +532,8 @@ public ResponseEntity<String> hansle(HttpEntity<byte[]> requestEntity) throws Un
 
 ## 7、项目实战（资费管理项目）
 
+（[spring-ssm-csrcbms](https://github.com/lBetterManl/book-JavaEE-SSM/tree/master/spring-ssm-csrcbms)）  
+
 **项目需求：**
 
 > 角色管理、管理员管理、资费管理、财务账号管理、业务账号管理、账单管理、报表、个人信息、修改密码。
